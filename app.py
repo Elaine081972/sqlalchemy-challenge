@@ -1,4 +1,4 @@
-# 1. import Flask and other dependencies
+#  import Flask and other dependencies
 import numpy as np
 
 import sqlalchemy
@@ -78,8 +78,8 @@ def stations():
     results = session.query(Station.station).all()
 
     session.close()
-    print(results)
-     # Convert list of tuples into normal list(good practice to close session/housekeeping) 
+
+    # Convert list of tuples into normal list(good practice to close session/housekeeping) 
     all_stations = list(np.ravel(results))
 
     return jsonify(all_stations)
@@ -97,7 +97,7 @@ def tobs():
     filter(Measurement.station == 'USC00519281').all()
 
     session.close()
-    print(results)
+   
      # Convert list of tuples into normal list(good practice to close session/housekeeping) 
     tobs = list(np.ravel(results))
   
