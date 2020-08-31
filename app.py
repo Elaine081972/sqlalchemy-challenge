@@ -41,10 +41,10 @@ def welcome():
         f"<a href='/api/v1.0/precipitation'>precipitation</a><br/>"
         f"<a href='/api/v1.0/stations'>station</a><br/>"
         f"<a href='/api/v1.0/tobs'>tobs</a><br/>"
-        f"<a href='/api/v1.0/start'>start</a><br/>"
-        f"<a href='/api/v1.0/start/end'>start/end</a><br/>"
-        f"<a href='/api/v1.0/postcodes'>postcodes</a><br/>"
-        
+        f"For dates please enter as 2017-01-01 format in URL<br/>"
+        f"The following routes provide the temperature minimum, average and maximum values<br/>"
+        f"<a href='/api/v1.0/start_date/2017-01-01'>start_date/2017-01-01</a><br/>"
+        f"<a href='/api/v1.0/start_and_end_dates/2017-01-01/2017-01-15'>start_and_end_dates/2017-01-01/2017-01-15</a><br/>"    
     )
 
 @app.route("/api/v1.0/precipitation")
@@ -99,19 +99,19 @@ def tobs():
 
     session.close()
    
-     # Convert list of tuples into normal list(good practice to close session/housekeeping) 
+    # Convert list of tuples into normal list(good practice to close session/housekeeping) 
     tobs = list(np.ravel(results))
   
     return jsonify(tobs)  
 
-@app.route("/api/v1.0/postcodes/<value>")
-def postcodes(value):
+@app.route("/api/v1.0/start_date/<start>")
+def start_date(start):
     # Create our session (link) from Python to the DB
     session = Session(engine)
 
-    # Query all countries in billing history
+    # Query the start date to retrieve TMIN,TAVG,TMAX for all dates greater and equal to start
     results = session.query(func.min(Measurement.tobs), func.avg(Measurement.tobs), func.max(Measurement.tobs)).\
-        filter(Measurement.date >= value).all()
+        filter(Measurement.date >= start).all()
 
     session.close()
 
@@ -121,13 +121,13 @@ def postcodes(value):
     return jsonify(all_results)
 
 
-#@app.route("/api/v1.0/<start>")
-#def start(start):
+@app.route("/api/v1.0/start_and_end_dates/<start>/<end>")
+def start_and_end_dates(start,end):
 
 # Create our session (link) from Python to the DB
-    #session = Session(engine)
+    session = Session(engine)
 
-"""TMIN, TAVG, and TMAX for a list of dates.
+    """TMIN, TAVG, and TMAX for a list of dates.
     
     Args:
         start_date (string): A date string in the format %Y-%m-%d
@@ -136,17 +136,16 @@ def postcodes(value):
     Returns:
         TMIN, TAVE, and TMAX
     """
-    
-   
+    # Query the start and end dates to retrieve TMIN,TAVG,TMAX for dates between and inclusive of those given
+    results = session.query(func.min(Measurement.tobs), func.avg(Measurement.tobs), func.max(Measurement.tobs)).\
+        filter(Measurement.date >= start).filter(Measurement.date <= end).all()
 
+    session.close()
 
+     # Convert list of tuples into normal list
+    all_results = list(np.ravel(results))
 
-
-
-
-#@app.route("/api/v1.0/<start>/<end>")
-
-
+    return jsonify(all_results)
 
 if __name__ == '__main__':
     app.run(debug=True)
