@@ -1,4 +1,4 @@
-#  import Flask and other dependencies
+# import Flask and other dependencies
 import numpy as np
 
 import sqlalchemy
@@ -37,7 +37,7 @@ app = Flask(__name__)
 def welcome():
     """List all available api routes."""
     return (
-        f"Available Routes :<br/>"
+        f"Welcome to my Hawaii Weather Station API! Available Routes :<br/>"
         f"<a href='/api/v1.0/precipitation'>precipitation</a><br/>"
         f"<a href='/api/v1.0/stations'>station</a><br/>"
         f"<a href='/api/v1.0/tobs'>tobs</a><br/>"
@@ -102,6 +102,33 @@ def tobs():
     tobs = list(np.ravel(results))
   
     return jsonify(tobs)    
+
+#@app.route("/api/v1.0/<start>")
+#def start/end(start_date, end_date):
+
+# Create our session (link) from Python to the DB
+    #session = Session(engine)
+
+"""TMIN, TAVG, and TMAX for a list of dates.
+    
+    Args:
+        start_date (string): A date string in the format %Y-%m-%d
+        end_date (string): A date string in the format %Y-%m-%d
+        
+    Returns:
+        TMIN, TAVE, and TMAX
+    """
+    
+    #return session.query(func.min(Measurement.tobs), func.avg(Measurement.tobs), func.max(Measurement.tobs)).\
+        #filter(Measurement.date >= start_date).filter(Measurement.date <= end_date).all()
+
+
+
+
+
+
+
+#@app.route("/api/v1.0/<start>/<end>")
 
 
 
