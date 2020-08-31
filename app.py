@@ -43,6 +43,7 @@ def welcome():
         f"<a href='/api/v1.0/tobs'>tobs</a><br/>"
         f"<a href='/api/v1.0/start'>start</a><br/>"
         f"<a href='/api/v1.0/start/end'>start/end</a><br/>"
+        f"<a href='/api/v1.0/postcodes'>postcodes</a><br/>"
         
     )
 
@@ -101,7 +102,24 @@ def tobs():
      # Convert list of tuples into normal list(good practice to close session/housekeeping) 
     tobs = list(np.ravel(results))
   
-    return jsonify(tobs)    
+    return jsonify(tobs)  
+
+@app.route("/api/v1.0/postcodes/<value>")
+def postcodes(value):
+    # Create our session (link) from Python to the DB
+    session = Session(engine)
+
+    # Query all countries in billing history
+    results = session.query(func.min(Measurement.tobs), func.avg(Measurement.tobs), func.max(Measurement.tobs)).\
+        filter(Measurement.date >= value).all()
+
+    session.close()
+
+    # Convert list of tuples into normal list
+    all_results = list(np.ravel(results))
+
+    return jsonify(all_results)
+
 
 #@app.route("/api/v1.0/<start>")
 #def start(start):
@@ -119,9 +137,7 @@ def tobs():
         TMIN, TAVE, and TMAX
     """
     
-    #return session.query(func.min(Measurement.tobs), func.avg(Measurement.tobs), func.max(Measurement.tobs)).\
-        #filter(Measurement.date >= start_date).filter(Measurement.date <= end_date).all()
-
+   
 
 
 
