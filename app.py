@@ -104,7 +104,7 @@ def tobs():
     return jsonify(tobs)    
 
 #@app.route("/api/v1.0/<start>")
-#def start/end(start_date, end_date):
+#def start(start):
 
 # Create our session (link) from Python to the DB
     #session = Session(engine)
