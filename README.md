@@ -15,7 +15,8 @@ A bar plot and the summary statistics for the precipitation data were done using
 A query was designed to calculate the total number of stations in the database. Further queries were designed around the temperature
 observation data(TOBS). A list of the stations with their total observation counts in descending order were found. This then allowed us to further explore the most "active" station (USC00519281). The last twelve months of TOBS data for this particular station was retrieved and then plotted as a histogram.
 
-###Climate App
+###Climate App:
+
 Flask was used to create our routes for our Hawaii weather API. A home page was created with five different routes:
 1. precipatation query that returns date and prcp in JSON format of the dictionary
 2. station query that returns list of stations in JSON
